@@ -114,21 +114,73 @@
 
   const openButton = document.querySelector("#letter-open");
   const letterPaper = document.querySelector("#letter-paper");
+  const envelopeBox = document.querySelector("#envelope-box");
+  const envelopeWrapper = document.querySelector("#envelope-wrapper");
+  const closeButton = document.querySelector("#letter-close");
+
+  const spawnMiniHearts = () => {
+    if (reduceMotion) return;
+    const count = 9;
+    const seal = openButton ? openButton.getBoundingClientRect() : null;
+    const originX = seal ? seal.left + seal.width / 2 : window.innerWidth / 2;
+    const originY = seal ? seal.top + seal.height / 2 : window.innerHeight / 2;
+
+    for (let i = 0; i < count; i++) {
+      const heart = document.createElement("span");
+      heart.className = "mini-floating-heart";
+      heart.textContent = ["♥", "♡", "❤", "💕"][i % 4];
+      heart.style.left = `${originX}px`;
+      heart.style.top = `${originY}px`;
+      const tx = (Math.random() - 0.5) * 160;
+      const rot = (Math.random() - 0.5) * 60;
+      heart.style.setProperty("--tx", `${tx}px`);
+      heart.style.setProperty("--rot", `${rot}deg`);
+      document.body.appendChild(heart);
+      setTimeout(() => heart.remove(), 1300);
+    }
+  };
 
   const openLetter = (celebrate = true) => {
     if (letterOpened || !letterPaper) return;
     letterOpened = true;
-    letterPaper.classList.add("is-open");
-    if (openButton) {
-      openButton.setAttribute("aria-expanded", "true");
-      openButton.hidden = true;
-    }
-    if (reduceMotion) showCompleteLetter();
-    else typeLetter();
-    if (celebrate && !reduceMotion) launchConfetti();
+
+    if (envelopeBox) envelopeBox.classList.add("is-open");
+    if (openButton) openButton.setAttribute("aria-expanded", "true");
+
+    spawnMiniHearts();
+
+    setTimeout(() => {
+      letterPaper.classList.add("is-open");
+      if (envelopeWrapper) envelopeWrapper.classList.add("is-hidden");
+      if (reduceMotion) showCompleteLetter();
+      else typeLetter();
+      if (celebrate && !reduceMotion) launchConfetti();
+    }, 600);
+  };
+
+  const closeLetter = () => {
+    letterOpened = false;
+    if (letterPaper) letterPaper.classList.remove("is-open");
+    if (envelopeWrapper) envelopeWrapper.classList.remove("is-hidden");
+    if (envelopeBox) envelopeBox.classList.remove("is-open");
+    if (openButton) openButton.setAttribute("aria-expanded", "false");
   };
 
   if (openButton) openButton.addEventListener("click", () => openLetter(true));
+  if (envelopeBox) {
+    envelopeBox.addEventListener("click", (e) => {
+      if (e.target !== openButton && !openButton?.contains(e.target)) {
+        openLetter(true);
+      }
+    });
+    envelopeBox.addEventListener("keydown", (e) => {
+      if (e.key === "Enter" || e.key === " ") {
+        e.preventDefault();
+        openLetter(true);
+      }
+    });
+  }
+  if (closeButton) closeButton.addEventListener("click", closeLetter);
 
   const revealNodes = Array.from(document.querySelectorAll(".reveal"));
   let revealObserver = null;
