@@ -18,13 +18,13 @@ window.SITE_CONTENT = {
   galleryHeading: "Moments We Treasure",
   photos: [
     {
-      src: "assets/photos/moment-1.jpg",
+      src: "assets/photos/moment-2.png",
       alt: "Doctor Saheba and Om smiling together",
       caption: "Where our friendship began",
       date: "Year 1"
     },
     {
-      src: "assets/photos/moment-2.png",
+      src: "assets/photos/moment-2.jpeg",
       alt: "Doctor Saheba and Om in festive attire smiling together",
       caption: "Partner in countless stupid conversations 😂",
       date: "Through the Years"
