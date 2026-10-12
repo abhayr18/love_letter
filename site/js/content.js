@@ -21,7 +21,7 @@ window.SITE_CONTENT = {
       src: "assets/photos/moment-2.png",
       alt: "Doctor Saheba and Om smiling together",
       caption: "Where our friendship began",
-      date: "Year 1"
+      date: "Our first Photo"
     },
     {
       src: "assets/photos/moment-2.jpeg",
